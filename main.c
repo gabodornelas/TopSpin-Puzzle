@@ -1,46 +1,34 @@
 #include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <getopt.h>
-#include <limits.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <time.h>
 // Headers de nuestros archivos
-#include "validacionDatos.h"
-#include "archivos.h"
-#include "impresion.h"
-#include "estructura.h"
+#include "nodo.h"
 
-int main(int argc, char** argv) {
-	/* Parámetros, con valores predeterminados */
-	char *clave = argv[1];
-	char *dir = mi_strdup("./dicot");
-	char *trueTexto = mi_strdup("Sí tiene");
-	char *falseTexto = mi_strdup("No tiene");
-	bool concatPrefijo = true;
-	bool concatSufijo = false;
+int main(int argc, char* argv[]) {
+	if (argc != 14) {
+        printf("❌ Error: Debes ingresar exactamente 12 numeros y el nombre del archivo de salida.\n");
+        printf("Uso correcto: %s n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 salida.txt\n", argv[0]);
+        return 1;
+    }
+	int numeros[12];
+	char *salida = argv[13];
+	for (int i = 0; i < 12; i++) {
+        numeros[i] = atoi(argv[i + 1]); 
+    }
+	// Comprobación para mostrar lo que se guardó
+    printf("Arreglo cargado desde parametros:\n( ");
+    for (int i = 0; i < 12; i++) {
+        printf("%d ", numeros[i]);
+    }
+    printf(")\n");
+	printf("%s\n",salida);
 
-	// Para comprobación
-	bool hayPre = false;
-	bool haySuf = false;
 
-	/* Aquí empieza el manejo de las flags de la terminal */
-	
-	// Esto se usa para verificar opciones largas y cortas
-	static struct option long_options[] ={
-		// Estas opciones las distinguimos por sus índices.
-		{"dir",	required_argument,	0, 'd'},
-		{"true",	required_argument,	0, 't'},
-		{"false",	required_argument,	0, 'f'},
-		{"pre",	no_argument,		0, 'p'},
-		{"suf",	no_argument,		0, 's'},
-		{"help",	no_argument,		0, 'h'},
-		{0, 0, 0, 0}
-	};
 
+
+    return 0;
+}
+
+/*
 	int opt;
 	int opt_ind = 0;
 
@@ -99,7 +87,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	/* Comprobación del nombre de archivo adecuado */
+	 Comprobación del nombre de archivo adecuado 
 	if (!clave) {
 		printf("❌ Necesitas indicar el nombre del archivo .json con la clave dicotómica.\n\n");
 		return -1;
@@ -134,4 +122,4 @@ int main(int argc, char** argv) {
 	double tiempo_ejecucion = (double)(final - inicio) / CLOCKS_PER_SEC;
 	printf("⏱️  Tiempo de ejecución para la creación de directorios: %fs\n", tiempo_ejecucion);
 	return 0;
-}
+}**/

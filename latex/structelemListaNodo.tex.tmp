@@ -1,0 +1,23 @@
+\hypertarget{structelemListaNodo}{}\doxysection{elem\+Lista\+Nodo Struct Reference}
+\label{structelemListaNodo}\index{elemListaNodo@{elemListaNodo}}
+
+
+Collaboration diagram for elem\+Lista\+Nodo\+:
+% FIG 0
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structelemListaNodo_ad3877390688800bf00111c8df4b556bf}\label{structelemListaNodo_ad3877390688800bf00111c8df4b556bf}} 
+struct \mbox{\hyperlink{structnodo}{nodo}} $\ast$ {\bfseries nodo}
+\item 
+\mbox{\Hypertarget{structelemListaNodo_a696265f03cae173af8599a9797e786b5}\label{structelemListaNodo_a696265f03cae173af8599a9797e786b5}} 
+struct \mbox{\hyperlink{structelemListaNodo}{elem\+Lista\+Nodo}} $\ast$ {\bfseries sig}
+\item 
+\mbox{\Hypertarget{structelemListaNodo_a536f61b5335ae3db25260b31bb704109}\label{structelemListaNodo_a536f61b5335ae3db25260b31bb704109}} 
+struct \mbox{\hyperlink{structelemListaNodo}{elem\+Lista\+Nodo}} $\ast$ {\bfseries ant}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+nodo.\+h\end{DoxyCompactItemize}
