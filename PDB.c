@@ -1,16 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "nodo.h"
 #include "PDB.h"
 
 // {1,2,3}, {5,6,7}, {9,10,11}
 
-// Arreglo con todos los posibles nodos partiendo desde un nodo inicial que nos interesa
-unsigned char visitados[1320];
-void inicializar_PDB() {
-    memset(visitados, 255, sizeof(visitados));
+void inicializarPDB(unsigned char *visitados) {
+    memset(visitados, 255, 1320);
 }
 
 int indicePerfecto(int p1, int p2, int p3) {
@@ -39,9 +38,8 @@ int findCandidato(int val, int *state){
     return 0;
 }
 
-void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med, int ult) {
+void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med, int ult, unsigned char *visitados) {
 	if (nodoInicial == NULL) return;
-    inicializar_PDB();
 	int p1 = findCandidato(a, nodoInicial->estado);
     int p2 = findCandidato(b, nodoInicial->estado);
     int p3 = findCandidato(c, nodoInicial->estado);
@@ -86,4 +84,38 @@ void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med,
         primeroCola = primeroCola->sig;
     }
 	limpiarListaNodo(cola);
+}
+
+void creacionPDB(const char *PDB, unsigned char *visitados){
+    if(access(PDB, F_OK) == -1){		//Si no existe, la creamos
+		int a, b, c, ini, med, ult, particion;
+		printf("Ingresa 6 números: ");
+		particion = scanf("%d %d %d %d %d %d", &a, &b, &c, &ini, &med, &ult);
+		if(particion != 6)
+			printf("❌ Error: No ingresaste 6 numeros.\n");
+		else{
+            int state[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+            state[ini] = a;
+            state[med] = b;
+            state[ult] = c;
+			FILE *base = fopen(PDB, "w");
+			if(base != NULL){
+				caminosBFS(crearNodo(state,0),a,b,c,ini,med,ult, visitados);
+				for(int i = 0; i < 1320; i++)
+					fprintf(base, "%d %d\n", i, visitados[i]);
+				fclose(base);
+				printf("✅ Se creo exitosamente la PDB '%s'.\n", PDB);
+			}
+			else
+				printf("❌ Error: No se pudo crear el archivo.\n");
+		}
+	}else{
+        int indice, valor;
+        FILE *base = fopen(PDB, "r");
+        while(fscanf(base, "%d %d", &indice, &valor) == 2){
+            visitados[indice] = valor;
+        }
+        fclose(base);
+        printf("✅ Se cargo exitosamente la PDB '%s'.\n", PDB);
+    }
 }

@@ -2,16 +2,11 @@
 #define PDB_H
 
 /**
- * @brief                   Arreglo con la cantidad de movimientos desde un determinado estado
- * 
- */
-extern unsigned char visitados[1320];
-
-/**
  * @brief                   Inicializa el arreglo con puros 255 ()
  * 
+ * @param visitados         El arreglo 'visitados' a inicializar
  */
-void inicializar_PDB();
+void inicializarPDB(unsigned char *visitados);
 
 /**
  * @brief                   Calcula el indice unico para las posiciones de las piezas de la particion
@@ -42,7 +37,16 @@ int findCandidato(int val, int *state);
  * @param ini               La posicion ideal de la pieza 'a'
  * @param med               La posicion ideal de la pieza 'b'
  * @param ult               La posicion ideal de la pieza 'c'
+ * @param visitados         El arreglo 'visitados'
  */
-void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med, int ult);
+void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med, int ult, unsigned char *visitados);
+
+/**
+ * @brief                   Creacion y escritura del archivo .txt que contendra la PDB y llenado del arreglo 'visitados'
+ * 
+ * @param PDB               Nombre del archivo .txt que contendra la PDB
+ * @param visitados         El arreglo 'visitados'
+ */
+void creacionPDB(const char *PDB, unsigned char *visitados);
 
 #endif

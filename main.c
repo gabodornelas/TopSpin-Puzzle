@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 // Headers de nuestros archivos
 #include "nodo.h"
 #include "PDB.h"
@@ -10,6 +11,7 @@ int main(int argc, char* argv[]) {
         printf("Uso correcto: %s n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 salida.txt\n", argv[0]);
         return 1;
     }
+	
 	int estadoInicial[12];
 	char *salida = argv[13];
 	for (int i = 0; i < 12; i++) {
@@ -23,7 +25,30 @@ int main(int argc, char* argv[]) {
     printf(")\n");
 	printf("%s\n",salida);
 
-	caminosBFS(crearNodo(estadoInicial,0),1,2,3,0,1,2);
+	// PDBs
+	const char *PDB1 = "PDB1.txt";
+	const char *PDB2 = "PDB2.txt";
+	const char *PDB3 = "PDB3.txt";
+
+	// Arreglos que contienen las claves para los diferentes estados 
+	// Se inicializan para llenarlos mas abajo
+	unsigned char visitados1[1320];
+    inicializarPDB(visitados1);
+	unsigned char visitados2[1320];
+    inicializarPDB(visitados2);
+	unsigned char visitados3[1320];
+    inicializarPDB(visitados3);
+
+	// Llenado de PDB
+	creacionPDB(PDB1, visitados1);
+	creacionPDB(PDB2, visitados2);
+	creacionPDB(PDB3, visitados3);
+
+	//Existan o no, fuera del if ejecutamos IDA*
+	
+	//Escribimos en salida estandar la longitud del camino y el numero de estados generados
+
+	//Escribimos en el archivo salida el camino de estados desde el inicial hasta la meta
 
     return 0;
 }
