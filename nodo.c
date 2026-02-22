@@ -3,58 +3,46 @@
 #include <stdio.h>
 #include "nodo.h"
 
-struct nodo *crearNodo(int state[12]){
-    struct nodo *newnodo = (struct nodo *)malloc(sizeof(struct nodo));
+struct nodo *crearNodo(int state[12], int dist) {
+	struct nodo *newnodo = (struct nodo *)malloc(sizeof(struct nodo));
     for (int i = 0; i < 12; i++) {
         newnodo->estado[i] = state[i]; 
     }
-    newnodo->izq = NULL;
-    newnodo->der = NULL;
-    newnodo->rotar = NULL;
-    return newnodo;
+    newnodo->distanciaPadre = dist;
+	newnodo->sig = NULL;
+	return newnodo;
 }
 
-struct elemListaNodo *crearElemListaNodo(struct nodo *nodo) {
-	if (nodo == NULL){
-        printf("❌ Error: Estas intentando crear un elemento con un nodo NULO");
-        return NULL;
-    }
-	struct elemListaNodo *nuevoElemListaNodo = calloc(1, sizeof(struct elemListaNodo));
-	nuevoElemListaNodo->nodo = nodo;
-	nuevoElemListaNodo->sig = nuevoElemListaNodo;
-    nuevoElemListaNodo->ant = nuevoElemListaNodo;
-	return nuevoElemListaNodo;
-}
-
-struct headListaNodo *crearLista() {
-    struct headListaNodo *x = (struct headListaNodo *)malloc(sizeof(struct headListaNodo));
-    if(x != NULL)
+struct head *crearLista() {
+    struct head *x = (struct head *)malloc(sizeof(struct head));
+    if(x != NULL){
         x->primero = NULL;
+        x->ultimo = NULL;
+    }
     return x;
 }
 
-void agregarNodo(struct headListaNodo *head, struct elemListaNodo *nuevo) {
+void agregarNodo(struct head *head, struct nodo *nuevo) {
     if((head == NULL) || (nuevo == NULL)){
         printf("❌ Error: Estas intentando crear una lista con un elemento NULO");
         return;
     }
     if(head->primero == NULL){
         head->primero = nuevo;
+        head->ultimo = nuevo;
     }else{
-        head->primero->ant->sig = nuevo;
-        nuevo->ant = head->primero->ant;
-        head->primero->ant = nuevo;
-        nuevo->sig = head->primero;
+        head->ultimo->sig = nuevo;
+        head->ultimo = nuevo;
     }
 }
 
-void limpiarListaNodo(struct headListaNodo *head){
+void limpiarListaNodo(struct head *head){
 	if (head != NULL){
 		if (head->primero == NULL)
 			free(head);
 		else{
-			struct elemListaNodo *actual = head->primero;
-			struct elemListaNodo *elemAlimpiar;
+			struct nodo *actual = head->primero;
+			struct nodo *elemAlimpiar;
 			while(actual != NULL){
 				elemAlimpiar = actual;
 				actual = actual->sig;

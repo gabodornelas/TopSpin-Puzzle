@@ -2,6 +2,7 @@
 #include <stdlib.h>
 // Headers de nuestros archivos
 #include "nodo.h"
+#include "PDB.h"
 
 int main(int argc, char* argv[]) {
 	if (argc != 14) {
@@ -23,7 +24,7 @@ int main(int argc, char* argv[]) {
 	printf("%s\n",salida);
 
 
-
+	caminosBFS(crearNodo(numeros,0),1,2,3,0,1,2);
 
     return 0;
 }

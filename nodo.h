@@ -3,43 +3,30 @@
 
 struct nodo {
 	int estado[12];
-    struct zona *izq;
-	struct zona *der;
-	struct zona *rotar;
+	int distanciaPadre;
+	struct nodo *sig;
 };
 
-struct elemListaNodo {
-	struct nodo *nodo;
-	struct elemListaNodo *sig;
-	struct elemListaNodo *ant;
-};
-
-struct headListaNodo {
-	struct elemListaNodo *primero;
+struct head {
+	struct nodo *primero;
+	struct nodo *ultimo;
 };
 
 /**
- * @brief 					inicializa un nodo con su estado
+ * @brief 							Crea un nodo para una lista doblemente enlazada y circular de tipo nodo
  * 
- * @param state 			estado del nodo
- * @return struct nodo* 	el nodo inicializado
+ * @param state 					Estado del nodo
+ * @param dist 					Distancia del padre 
+ * @return struct elemListaNodo* 	El nodo de lista creado
  */
-struct nodo *crearNodo(int state[12]);
+struct nodo *crearNodo(int state[12], int dist);
 
 /**
- * @brief 							Crea un elemento para una lista doblemente enlazada y circular de tipo nodo
+ * @brief 					Crea una lista enlazada de elementos de nodo.
  * 
- * @param nodo 						El nodo correspondiente a este elemento de la lista
- * @return struct elemListaNodo* 	El elemento de lista creado
+ * @return struct head* 	La cabeza de la lista creada
  */
-struct elemListaNodo *crearElemListaNodo(struct nodo *nodo);
-
-/**
- * @brief 							Crea una lista enlazada de elementos de nodo.
- * 
- * @return struct headListaNodo* 	La cabeza de la lista creada
- */
-struct headListaNodo *crearLista();
+struct head *crearLista();
 
 /**
  * @brief 			Agrega un elemento a la lista de nodos.
@@ -47,13 +34,13 @@ struct headListaNodo *crearLista();
  * @param head 		Cabeza de la lista
  * @param nuevo 	Elemento a agregar en la lista
  */
-void agregarNodo(struct headListaNodo *head, struct elemListaNodo *nuevo);
+void agregarNodo(struct head *head, struct nodo *nuevo);
 
 /**
  * @brief 			Limpia la lista y sus elementos
  * 
  * @param head 		La cabeza de la lista a limpiar
  */
-void limpiarListaNodo(struct headListaNodo *head);
+void limpiarListaNodo(struct head *head);
 
 #endif
