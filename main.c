@@ -10,21 +10,20 @@ int main(int argc, char* argv[]) {
         printf("Uso correcto: %s n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 salida.txt\n", argv[0]);
         return 1;
     }
-	int numeros[12];
+	int estadoInicial[12];
 	char *salida = argv[13];
 	for (int i = 0; i < 12; i++) {
-        numeros[i] = atoi(argv[i + 1]); 
+        estadoInicial[i] = atoi(argv[i + 1]); 
     }
 	// Comprobación para mostrar lo que se guardó
     printf("Arreglo cargado desde parametros:\n( ");
     for (int i = 0; i < 12; i++) {
-        printf("%d ", numeros[i]);
+        printf("%d ", estadoInicial[i]);
     }
     printf(")\n");
 	printf("%s\n",salida);
 
-
-	caminosBFS(crearNodo(numeros,0),1,2,3,0,1,2);
+	caminosBFS(crearNodo(estadoInicial,0),1,2,3,0,1,2);
 
     return 0;
 }

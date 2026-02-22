@@ -29,10 +29,6 @@ int indicePerfecto(int p1, int p2, int p3) {
     return id;
 }
 
-int heuristica(int p1, int pos1, int p2, int pos2, int p3, int pos3){
-    return abs(p1-pos1) + abs(p2-pos2) + abs(p3-pos3);
-}
-
 int findCandidato(int val, int *state){
     int i = 0;
     while(i < 12){
@@ -49,19 +45,14 @@ void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med,
 	int p1 = findCandidato(a, nodoInicial->estado);
     int p2 = findCandidato(b, nodoInicial->estado);
     int p3 = findCandidato(c, nodoInicial->estado);
-    int padre = nodoInicial->distanciaPadre;
-    int cont=0;
-    visitados[indicePerfecto(p1, p2, p3)] = padre;
+    visitados[indicePerfecto(p1, p2, p3)] = nodoInicial->distanciaPadre;
     int vecino[12];
     int idVecino = 0;
     //arregla este gentio
-    struct nodo *nodoInicialElem = nodoInicial;
     struct head *cola = crearLista();
-    agregarNodo(cola, nodoInicialElem);
-    struct nodo *primeroCola;
-    while(cola->primero != NULL){
-        primeroCola = cola->primero;
-        cola->primero = cola->primero->sig;
+    agregarNodo(cola, nodoInicial);
+    struct nodo *primeroCola = cola->primero;;
+    while(primeroCola != NULL){ 
         for(int i = 1; i <= 3; i++){
             switch(i){
                 case 1: // rotar izq
@@ -90,16 +81,9 @@ void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med,
             if(visitados[idVecino] == 255){ // no ha sido visitado
                 visitados[idVecino] = primeroCola->distanciaPadre+1;
                 agregarNodo(cola, crearNodo(vecino, primeroCola->distanciaPadre + 1));
-                cont++;
-                if(cont==1){
-                    printf("%d ",cont);
-                    for (int i = 0; i < 12; i++) {
-                        printf("%d ", vecino[i]);
-                    }
-                    printf("%d\n",idVecino);
-                }
             }
         }
+        primeroCola = primeroCola->sig;
     }
 	limpiarListaNodo(cola);
 }
