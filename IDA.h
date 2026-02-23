@@ -4,6 +4,8 @@
 struct solYlim {
 	struct nodo *nodo;
 	int limite;
+	long long edoEvaluados;
+	long long edoExplorados;
 };
 
 /**
@@ -76,8 +78,8 @@ int heuristica(int visita1, int visita2, int visita3);
  * @param info2                 La particion que sigue nuestra segunda PDB
  * @param visitados3            Nuestra tercera PDB
  * @param info3                 La particion que sigue nuestra tercera PDB
- * @return struct nodo*         El nodo meta con los apuntadores en el camino solucion
+ * @return struct solYlim*      la estructura con l nodo meta con los apuntadores en el camino solucion, la distancia del camino y el numero de estados generados
  */
-struct nodo *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3);
+struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3);
 
 #endif

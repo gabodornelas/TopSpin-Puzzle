@@ -2,7 +2,7 @@
 #define PDB_H
 
 /**
- * @brief                   Inicializa el arreglo con puros 255 ()
+ * @brief                   Inicializa el arreglo con puros 255 (valor basicamente INF en este contexto)
  * 
  * @param visitados         El arreglo 'visitados' a inicializar
  */
@@ -29,7 +29,7 @@ int indicePerfecto(int a, int b, int c, int *state);
 void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados);
 
 /**
- * @brief                   Creacion y escritura del archivo .txt que contendra la PDB y llenado del arreglo 'visitados'
+ * @brief                   Creacion y escritura del archivo .txt que contendra la PDB o carga del mismo y llenado del arreglo 'visitados'
  * 
  * @param PDB               Nombre del archivo .txt que contendra la PDB
  * @param visitados         El arreglo 'visitados'

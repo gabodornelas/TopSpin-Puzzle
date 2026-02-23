@@ -5,12 +5,14 @@
 #include "PDB.h"
 #include "IDA.h"
 
-#define INF 50
+#define INF 50 // valor infinito en este contexto
 
 struct solYlim *crearSolYlim(struct nodo *nodo, int limite){
 	struct solYlim *newsolYlim = (struct solYlim *)malloc(sizeof(struct solYlim));
     newsolYlim->nodo = nodo;
     newsolYlim->limite = limite;
+    newsolYlim->edoEvaluados = 0;
+    newsolYlim->edoExplorados = 0;
 	return newsolYlim;
 }
 
@@ -54,6 +56,7 @@ void crearVecinos(struct head *vecinos, int *vecino, struct nodo *nodoActual){
 }
 
 void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3){
+    resultadoDFS->edoExplorados++;
     int minCostoSig = nodoActual->distanciaPadre +
                     heuristica( visitados1[indicePerfecto(info1[0],info1[1],info1[2],nodoActual->estado)],
                                 visitados2[indicePerfecto(info2[0],info2[1],info2[2],nodoActual->estado)],
@@ -78,6 +81,7 @@ void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsi
     // Bucle de vecinos
     while(amistosoVecino != NULL){
         amistosoVecino->ant = nodoActual;
+        resultadoDFS->edoEvaluados++;
         DFS(amistosoVecino, limite, resultadoDFS, visitados1, info1, visitados2, info2, visitados3, info3);
         if(resultadoDFS->nodo != NULL)
             return;
@@ -100,7 +104,7 @@ int heuristica(int visita1, int visita2, int visita3){
 }
 
 // Función principal de IDA*
-struct nodo *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3){
+struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3){
     int g = 0;
     struct nodo *nodoInicial = crearNodo(estadoInicial,g);
     int limite = heuristica(    visitados1[indicePerfecto(info1[0],info1[1],info1[2],estadoInicial)],
@@ -111,7 +115,7 @@ struct nodo *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsi
         DFS(nodoInicial, limite, resultadoDFS, visitados1, info1, visitados2, info2, visitados3, info3);
         limite = resultadoDFS->limite;
         if(resultadoDFS->nodo != NULL)
-            return resultadoDFS->nodo;
+            return resultadoDFS;
     }
     return NULL;
 }

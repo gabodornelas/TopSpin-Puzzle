@@ -79,6 +79,9 @@ void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados) {
 	limpiarListaNodo(cola);
 }
 
+
+//  Para la creacion de PDBs se restrinjo que sea de particiones de 3 en 3, pero doy libertad a que sea cualquier particion en cualquier posicion
+//  depende del caso usarlo para una cosa u otra
 void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
     if(access(PDB, F_OK) == -1){		//Si no existe, la creamos
 		int ini, med, ult, particion;
@@ -99,11 +102,10 @@ void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
 					fprintf(base, "%d %d\n", i, visitados[i]);
 				fclose(base);
 				printf("✅ Se creo exitosamente la PDB '%s'.\n", PDB);
-			}
-			else
+			}else
 				printf("❌ Error: No se pudo crear el archivo.\n");
 		}
-	}else{
+	}else{                              //Existe, la cargamos
         int indice, valor;
         FILE *base = fopen(PDB, "r");
         fscanf(base, "%d %d %d", &info[0], &info[1], &info[2]);
@@ -111,6 +113,6 @@ void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
             visitados[indice] = valor;
         }
         fclose(base);
-        printf("✅ Se cargo exitosamente la PDB '%s'.\n", PDB);
+        //printf("✅ Se cargo exitosamente la PDB '%s'.\n", PDB);
     }
 }
