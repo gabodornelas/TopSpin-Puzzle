@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 		impresion(resultado);
 	}
 	//Escribimos en salida estandar la longitud del camino y el numero de estados generados
-
+	// Documento para explicar heuristica
 	//Escribimos en el archivo salida el camino de estados desde el inicial hasta la meta
 
     return 0;
