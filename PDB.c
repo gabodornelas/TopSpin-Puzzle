@@ -12,8 +12,17 @@ void inicializarPDB(unsigned char *visitados) {
     memset(visitados, 255, 1320);
 }
 
-int indicePerfecto(int p1, int p2, int p3) {
-    int id = 0;
+int indicePerfecto(int a, int b, int c, int *state) {
+    int i = 0, id = 0, p1 = 0, p2 = 0, p3 = 0;
+    while(i < 12){
+        if(state[i] == a)
+            p1 = i;
+        if(state[i] == b)
+            p2 = i;
+        if(state[i] == c)
+            p3 = i;
+        i++;
+    }
     id += p1 * (11 * 10);       // Hay 11*10 combinaciones por cada posición de p1
     int p2_ajustada = p2;
     if(p2 > p1)                 // Hay que ajustar porque p1 ya ocupa un lugar
@@ -28,22 +37,9 @@ int indicePerfecto(int p1, int p2, int p3) {
     return id;
 }
 
-int findCandidato(int val, int *state){
-    int i = 0;
-    while(i < 12){
-        if( state[i] == val)
-            return i;
-        i++;
-    }
-    return 0;
-}
-
-void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med, int ult, unsigned char *visitados) {
+void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados) {
 	if (nodoInicial == NULL) return;
-	int p1 = findCandidato(a, nodoInicial->estado);
-    int p2 = findCandidato(b, nodoInicial->estado);
-    int p3 = findCandidato(c, nodoInicial->estado);
-    visitados[indicePerfecto(p1, p2, p3)] = nodoInicial->distanciaPadre;
+    visitados[indicePerfecto(info[0], info[1], info[2], nodoInicial->estado)] = nodoInicial->distanciaPadre;
     int vecino[12];
     int idVecino = 0;
     //arregla este gentio
@@ -72,10 +68,7 @@ void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med,
                     }
                     break;
             }
-            p1 = findCandidato(a, vecino);
-            p2 = findCandidato(b, vecino);
-            p3 = findCandidato(c, vecino);
-            idVecino = indicePerfecto(p1, p2, p3);
+            idVecino = indicePerfecto(info[0], info[1], info[2], vecino);
             if(visitados[idVecino] == 255){ // no ha sido visitado
                 visitados[idVecino] = primeroCola->distanciaPadre+1;
                 agregarNodo(cola, crearNodo(vecino, primeroCola->distanciaPadre + 1));
@@ -86,21 +79,22 @@ void caminosBFS(struct nodo *nodoInicial, int a, int b, int c, int ini, int med,
 	limpiarListaNodo(cola);
 }
 
-void creacionPDB(const char *PDB, unsigned char *visitados){
+void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
     if(access(PDB, F_OK) == -1){		//Si no existe, la creamos
-		int a, b, c, ini, med, ult, particion;
-		printf("Ingresa 6 números: ");
-		particion = scanf("%d %d %d %d %d %d", &a, &b, &c, &ini, &med, &ult);
+		int ini, med, ult, particion;
+		printf("Ingresa 6 números, 3 entre 1 y 12 (fichas), y 3 entre 1 y 12 (posiciones para las fichas):\n");
+		particion = scanf("%d %d %d %d %d %d", &info[0], &info[1], &info[2], &ini, &med, &ult);
 		if(particion != 6)
 			printf("❌ Error: No ingresaste 6 numeros.\n");
 		else{
             int state[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
-            state[ini] = a;
-            state[med] = b;
-            state[ult] = c;
+            state[ini] = info[0];
+            state[med] = info[1];
+            state[ult] = info[2];
 			FILE *base = fopen(PDB, "w");
 			if(base != NULL){
-				caminosBFS(crearNodo(state,0),a,b,c,ini,med,ult, visitados);
+                fprintf(base, "%d %d %d\n", info[0], info[1], info[2]);   // Anoto la particion a seguir
+				caminosBFS(crearNodo(state,0),info, visitados);
 				for(int i = 0; i < 1320; i++)
 					fprintf(base, "%d %d\n", i, visitados[i]);
 				fclose(base);
@@ -112,6 +106,7 @@ void creacionPDB(const char *PDB, unsigned char *visitados){
 	}else{
         int indice, valor;
         FILE *base = fopen(PDB, "r");
+        fscanf(base, "%d %d %d", &info[0], &info[1], &info[2]);
         while(fscanf(base, "%d %d", &indice, &valor) == 2){
             visitados[indice] = valor;
         }

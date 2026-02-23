@@ -4,7 +4,7 @@ CFLAGS_COMMON   = -Wall
 CFLAGS_DEBUG    = $(CFLAGS_COMMON) -g3 -O0
 CFLAGS_RELEASE  = $(CFLAGS_COMMON) -O2
 
-SRC             = main.c nodo.c PDB.c
+SRC             = main.c nodo.c PDB.c IDA.c
 
 OBJ_DEBUG       = $(SRC:.c=.debug.o)
 OBJ_RELEASE     = $(SRC:.c=.release.o)

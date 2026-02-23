@@ -5,6 +5,7 @@ struct nodo {
 	int estado[12];
 	int distanciaPadre;
 	struct nodo *sig;
+	struct nodo *ant;
 };
 
 struct head {
@@ -13,10 +14,10 @@ struct head {
 };
 
 /**
- * @brief 							Crea un nodo para una lista doblemente enlazada y circular de tipo nodo
+ * @brief 							Crea un nodo para una lista enlazada de tipo nodo
  * 
  * @param state 					Estado del nodo
- * @param dist 					Distancia del padre 
+ * @param dist 						Distancia del padre 
  * @return struct elemListaNodo* 	El nodo de lista creado
  */
 struct nodo *crearNodo(int state[12], int dist);

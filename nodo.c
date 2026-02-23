@@ -10,6 +10,7 @@ struct nodo *crearNodo(int state[12], int dist) {
     }
     newnodo->distanciaPadre = dist;
 	newnodo->sig = NULL;
+    newnodo->ant = NULL;
 	return newnodo;
 }
 
