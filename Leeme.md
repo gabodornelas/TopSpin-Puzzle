@@ -6,7 +6,9 @@
 ```bash
 sudo apt update
 sudo apt install build-essential
+```
 #### Para ejecutar:
 * Ejecutar en la terminal dentro de la ubicacion del proyecto el siguiente comando:
 ```C
 ./topspin n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 salida.txt
+```
