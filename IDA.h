@@ -53,20 +53,17 @@ void crearVecinos(struct head *vecinos, int *vecino, struct nodo *nodoActual);
  * @param info1               La particion que sigue nuestra primera PDB
  * @param visitados2          Nuestra segunda PDB
  * @param info2               La particion que sigue nuestra segunda PDB
- * @param visitados3          Nuestra tercera PDB
- * @param info3               La particion que sigue nuestra tercera PDB
  */
-void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3);
+void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2);
 
 /**
  * @brief                       Calculo para decidir cual PDB tiene la cantidad de movimientos mas alta para un estado determinado
  * 
  * @param visita1               Cantidad de movimientos necesarios para llegar al estado meta registrada en la PDB1
  * @param visita2               Cantidad de movimientos necesarios para llegar al estado meta registrada en la PDB2
- * @param visita3               Cantidad de movimientos necesarios para llegar al estado meta registrada en la PDB3
  * @return int                  El valor maximo entre las 3
  */
-int heuristica(int visita1, int visita2, int visita3);
+int heuristica(int visita1, int visita2);
 
 /**
  * @brief                       Funcion IDA* que llama a la DFS para cada nuevo limite de profuncidad requerido
@@ -76,10 +73,8 @@ int heuristica(int visita1, int visita2, int visita3);
  * @param info1                 La particion que sigue nuestra primera PDB
  * @param visitados2            Nuestra segunda PDB
  * @param info2                 La particion que sigue nuestra segunda PDB
- * @param visitados3            Nuestra tercera PDB
- * @param info3                 La particion que sigue nuestra tercera PDB
  * @return struct solYlim*      la estructura con l nodo meta con los apuntadores en el camino solucion, la distancia del camino y el numero de estados generados
  */
-struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3);
+struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2);
 
 #endif

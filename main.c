@@ -20,14 +20,14 @@ int main(int argc, char* argv[]) {
         printf("Uso correcto: %s n1 n2 n3 n4 n5 n6 n7 n8 n9 n10 n11 n12 salida.txt\nDonde cada n es un numero entre 1 y 12\n", argv[0]);
         return 1;
     }
-	
+
 	int estadoInicial[12];
 	int repeticiones[12] = {0,0,0,0,0,0,0,0,0,0,0,0}; // Chequeo de numeros repetidos en la instancia inicial
 	char *salida = argv[13];
 	for (int i = 0; i < 12; i++) {
         estadoInicial[i] = atoi(argv[i + 1]); 
     }
-	// Comprobación de datos validos
+	// Validacion de datos validos
     for (int i = 0; i < 12; i++) {
         if(estadoInicial[i] > 12 || estadoInicial[i] < 1){	// Que este entre 1 y 12
 			printf("❌ Error: Debes ingresar numeros entre 1 y 12.\n");
@@ -50,24 +50,25 @@ int main(int argc, char* argv[]) {
     }
 
 	// PDBs
-	const char *PDB1 = "PDB1.txt", *PDB2 = "PDB2.txt", *PDB3 = "PDB3.txt";
+	const char *PDB1 = "PDB1.txt", *PDB2 = "PDB2.txt";
 
-	// Arreglos que contienen las claves para los diferentes estados 
-	// Se inicializan para llenarlos mas abajo
-	unsigned char visitados1[1320], visitados2[1320], visitados3[1320];
+	// Arreglos que contienen las claves para los diferentes estados
+	// Usando memoria dinámica (malloc o new) porque es muy grande para la pila
+	unsigned char *visitados1 = malloc(19958400 * sizeof(unsigned char));
+	unsigned char *visitados2 = malloc(19958400 * sizeof(unsigned char));
     inicializarPDB(visitados1);
     inicializarPDB(visitados2);
-    inicializarPDB(visitados3);
 
-	int info1[3], info2[3], info3[3]; // Para guardar informacion inicial de la particion
+
+	int info1[8], info2[8];// 	Para guardar informacion inicial de la particion
 
 	// Llenado de PDB
 	creacionPDB(PDB1, visitados1, info1);
 	creacionPDB(PDB2, visitados2, info2);
-	creacionPDB(PDB3, visitados3, info3);
+
 
 	// Ejecutamos IDA*
-	struct solYlim *resultado = IDA(estadoInicial, visitados1, info1, visitados2, info2, visitados3, info3);
+	struct solYlim *resultado = IDA(estadoInicial, visitados1, info1, visitados2, info2);
 	
 	if(resultado == NULL){
 		printf("❌ Error: No alcanzo el resultado.\n");
@@ -84,5 +85,7 @@ int main(int argc, char* argv[]) {
 			printf("❌ Error: No se pudo crear el archivo.\n");
 	}
 	// Documento para explicar heuristica
+	free(visitados1);
+	free(visitados2);
     return 0;
 }

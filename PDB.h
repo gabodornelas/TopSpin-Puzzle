@@ -14,10 +14,15 @@ void inicializarPDB(unsigned char *visitados);
   * @param a                El valor de la pieza 'a' a buscar
   * @param b                El valor de la pieza 'b' a buscar
   * @param c                El valor de la pieza 'c' a buscar
+  * @param d                El valor de la pieza 'd' a buscar
+  * @param e                El valor de la pieza 'e' a buscar
+  * @param f                El valor de la pieza 'f' a buscar
+  * @param g                El valor de la pieza 'g' a buscar
+  * @param h                El valor de la pieza 'h' a buscar
   * @param state            El estado en el que hay que buscar las piezas
   * @return int             Indice perfecto calculado
   */
-int indicePerfecto(int a, int b, int c, int *state);
+int indicePerfecto(int a, int b, int c, int d, int e, int f, int g, int h, int *state);
 
 /**
  * @brief                   Busqueda en BFS para la ubicacion de los nodos en el arreglo 'visitados'

@@ -24,11 +24,9 @@ int min(int v1, int v2){
 }
 
 int esMeta(int *state){
-    for(int i = 0; i < 12; i++){
-        if(state[i] != i+1){
+    for(int i = 0; i < 12; i++)
+        if(state[i] != i+1)
             return 0;
-        }
-    }
     return 1;
 }
 
@@ -38,13 +36,11 @@ void crearVecinos(struct head *vecinos, int *vecino, struct nodo *nodoActual){
     for (int i = 1; i < 12; i++)
         vecino[i-1] = nodoActual->estado[i];
     agregarNodo(vecinos, crearNodo(vecino,nodoActual->distanciaPadre+1));
-    
     // der
     vecino[0] = nodoActual->estado[11];
     for (int i = 0; i < 11; i++)
         vecino[i+1] = nodoActual->estado[i];
     agregarNodo(vecinos, crearNodo(vecino,nodoActual->distanciaPadre+1));
-
     // girar
     for (int i = 0; i < 12; i++) {
         if(i < 4)
@@ -55,12 +51,11 @@ void crearVecinos(struct head *vecinos, int *vecino, struct nodo *nodoActual){
     agregarNodo(vecinos, crearNodo(vecino,nodoActual->distanciaPadre+1));
 }
 
-void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3){
+void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2){
     resultadoDFS->edoExplorados++;
     int minCostoSig = nodoActual->distanciaPadre +
-                    heuristica( visitados1[indicePerfecto(info1[0],info1[1],info1[2],nodoActual->estado)],
-                                visitados2[indicePerfecto(info2[0],info2[1],info2[2],nodoActual->estado)],
-                                visitados3[indicePerfecto(info3[0],info3[1],info3[2],nodoActual->estado)]    );
+                    heuristica( visitados1[indicePerfecto(info1[0],info1[1],info1[2],info1[3],info1[4],info1[5],info1[6],info1[7],nodoActual->estado)],
+                                visitados2[indicePerfecto(info2[0],info2[1],info2[2],info2[3],info2[4],info2[5],info2[6],info2[7],nodoActual->estado)]  );
     if(minCostoSig > limite){
         resultadoDFS->nodo = NULL;
         resultadoDFS->limite = minCostoSig;
@@ -82,7 +77,7 @@ void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsi
     while(amistosoVecino != NULL){
         amistosoVecino->ant = nodoActual;
         resultadoDFS->edoEvaluados++;
-        DFS(amistosoVecino, limite, resultadoDFS, visitados1, info1, visitados2, info2, visitados3, info3);
+        DFS(amistosoVecino, limite, resultadoDFS, visitados1, info1, visitados2, info2);
         if(resultadoDFS->nodo != NULL)
             return;
         limCostoSig = min(limCostoSig, resultadoDFS->limite);
@@ -93,26 +88,22 @@ void DFS(struct nodo *nodoActual, int limite, struct solYlim *resultadoDFS, unsi
     resultadoDFS->limite = limCostoSig;
 }
 
-int heuristica(int visita1, int visita2, int visita3){
-    if( (visita1 >= visita2) && (visita1 >= visita3) )
-            return visita1;
-    else if( (visita2 >= visita1) && (visita2 >= visita3) )
-            return visita2;
-    else if( (visita3 >= visita1) && (visita3 >= visita2) )
-            return visita3;
+int heuristica(int visita1, int visita2){
+    if(visita1 >= visita2)
+        return visita1;
+    else
+        return visita2;
     return 0;// esto nunca deberia pasar
 }
 
 // Función principal de IDA*
-struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2, unsigned char *visitados3, int *info3){
-    int g = 0;
-    struct nodo *nodoInicial = crearNodo(estadoInicial,g);
-    int limite = heuristica(    visitados1[indicePerfecto(info1[0],info1[1],info1[2],estadoInicial)],
-                                visitados2[indicePerfecto(info2[0],info2[1],info2[2],estadoInicial)],
-                                visitados3[indicePerfecto(info3[0],info3[1],info3[2],estadoInicial)]    );
+struct solYlim *IDA(int *estadoInicial, unsigned char *visitados1, int *info1, unsigned char *visitados2, int *info2){
+    struct nodo *nodoInicial = crearNodo(estadoInicial,0);
+    int limite = heuristica(    visitados1[indicePerfecto(info1[0],info1[1],info1[2],info1[3],info1[4],info1[5],info1[6],info1[7],estadoInicial)],
+                                visitados2[indicePerfecto(info2[0],info2[1],info2[2],info2[3],info2[4],info2[5],info2[6],info2[7],estadoInicial)]   );
     struct solYlim *resultadoDFS = crearSolYlim(nodoInicial, limite);
     while(limite < INF){
-        DFS(nodoInicial, limite, resultadoDFS, visitados1, info1, visitados2, info2, visitados3, info3);
+        DFS(nodoInicial, limite, resultadoDFS, visitados1, info1, visitados2, info2);
         limite = resultadoDFS->limite;
         if(resultadoDFS->nodo != NULL)
             return resultadoDFS;

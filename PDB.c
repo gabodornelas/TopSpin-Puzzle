@@ -6,40 +6,38 @@
 #include "nodo.h"
 #include "PDB.h"
 
-// {1,2,3}, {5,6,7}, {9,10,11}
-
+// {1,2,3,4,5,6,7,8}, {5,6,7,8,9,10,11,12}
+// 19.958.400
 void inicializarPDB(unsigned char *visitados) {
-    memset(visitados, 255, 1320);
+    memset(visitados, 255, 19958400);
 }
 
-int indicePerfecto(int a, int b, int c, int *state) {
-    int i = 0, id = 0, p1 = 0, p2 = 0, p3 = 0;
-    while(i < 12){
-        if(state[i] == a)
-            p1 = i;
-        if(state[i] == b)
-            p2 = i;
-        if(state[i] == c)
-            p3 = i;
-        i++;
+int indicePerfecto(int a, int b, int c, int d, int e, int f, int g, int h, int *state){
+    int valores[8] = {a,b,c,d,e,f,g,h}; // Agrupamos las 8 piezas en un arreglo para poder iterarlas
+    // Multiplicadores precalculados para 8 piezas en 12 espacios, calculados como permutaciones de los espacios restantes.
+    int multiplicadores[8] = {1663200, 151200, 15120, 1680, 210, 30, 5, 1};
+    int p_ajustada = 0;
+    int p[8] = {0}; 
+    int id = 0;
+    for (int i = 0; i < 8; i++)         // Encontramos las posiciones de las 8 piezas en los 12 puestos
+        for (int j = 0; j < 12; j++)
+            if (state[j] == valores[i]) {
+                p[i] = j;
+                break;                  // Lo encontramos, pasamos a la siguiente pieza
+            }
+    for (int i = 0; i < 8; i++) {       // Calculo de la p_ajustada
+        p_ajustada = p[i];
+        for(int j = 0; j < i; j++)      // Restamos 1 por cada pieza anterior que ya ocupa un índice menor
+            if(p[j] < p[i])
+                p_ajustada--;
+        id += p_ajustada*multiplicadores[i]; // Sumamos al ID usando el multiplicador correspondiente
     }
-    id += p1 * (11 * 10);       // Hay 11*10 combinaciones por cada posición de p1
-    int p2_ajustada = p2;
-    if(p2 > p1)                 // Hay que ajustar porque p1 ya ocupa un lugar
-        p2_ajustada--;
-    id += p2_ajustada * 10;     // Hay 10 combinaciones por cada posición restante de p2
-    int p3_ajustada = p3;
-    if(p3 > p1)                 // Hay que ajustar porque p1 y p2 ya ocupan un lugar cada uno
-        p3_ajustada--;
-    if (p3 > p2)
-        p3_ajustada--;
-    id += p3_ajustada;
     return id;
 }
 
 void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados) {
 	if (nodoInicial == NULL) return;
-    visitados[indicePerfecto(info[0], info[1], info[2], nodoInicial->estado)] = nodoInicial->distanciaPadre;
+    visitados[indicePerfecto(info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7], nodoInicial->estado)] = nodoInicial->distanciaPadre;
     int vecino[12];
     int idVecino = 0;
     //arregla este gentio
@@ -68,7 +66,7 @@ void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados) {
                     }
                     break;
             }
-            idVecino = indicePerfecto(info[0], info[1], info[2], vecino);
+            idVecino = indicePerfecto(info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7], vecino);
             if(visitados[idVecino] == 255){ // no ha sido visitado
                 visitados[idVecino] = primeroCola->distanciaPadre+1;
                 agregarNodo(cola, crearNodo(vecino, primeroCola->distanciaPadre + 1));
@@ -80,25 +78,24 @@ void caminosBFS(struct nodo *nodoInicial, int *info, unsigned char *visitados) {
 }
 
 
-//  Para la creacion de PDBs se restrinjo que sea de particiones de 3 en 3, pero doy libertad a que sea cualquier particion en cualquier posicion
+//  Para la creacion de PDBs se restringio que sea de particiones de 8, pero doy libertad a que sea cualquier particion en cualquier posicion
 //  depende del caso usarlo para una cosa u otra
 void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
     if(access(PDB, F_OK) == -1){		//Si no existe, la creamos
-		int ini, med, ult, particion;
-		printf("Ingresa 6 números, 3 entre 1 y 12 (fichas), y 3 entre 1 y 12 (posiciones para las fichas):\n");
-		particion = scanf("%d %d %d %d %d %d", &info[0], &info[1], &info[2], &ini, &med, &ult);
-		if(particion != 6)
-			printf("❌ Error: No ingresaste 6 numeros.\n");
+		int uno, dos, tres, cuatro, cinco, seis, siete, ocho, particion;
+		printf("Ingresa 16 números, 8 entre 1 y 12 (fichas), y 8 entre 1 y 12 (posiciones para las fichas):\n");
+		particion = scanf("%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", &info[0], &info[1], &info[2], &info[3], &info[4], &info[5], &info[6], &info[7], &uno, &dos, &tres, &cuatro, &cinco, &seis, &siete, &ocho);
+		if(particion != 16)
+			printf("❌ Error: No ingresaste 16 numeros.\n");
 		else{
             int state[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
-            state[ini] = info[0];
-            state[med] = info[1];
-            state[ult] = info[2];
+            state[uno]   = info[0];   state[dos]  = info[1];   state[tres]  = info[2]; state[cuatro] = info[3];
+            state[cinco] = info[4];   state[seis] = info[5];   state[siete] = info[6]; state[ocho]   = info[7];
 			FILE *base = fopen(PDB, "w");
 			if(base != NULL){
-                fprintf(base, "%d %d %d\n", info[0], info[1], info[2]);   // Anoto la particion a seguir
+                fprintf(base, "%d %d %d %d %d %d %d %d\n", info[0], info[1], info[2], info[3], info[4], info[5], info[6], info[7]);   // Anoto la particion a seguir
 				caminosBFS(crearNodo(state,0),info, visitados);
-				for(int i = 0; i < 1320; i++)
+				for(int i = 0; i < 19958400; i++)
 					fprintf(base, "%d %d\n", i, visitados[i]);
 				fclose(base);
 				printf("✅ Se creo exitosamente la PDB '%s'.\n", PDB);
@@ -106,13 +103,14 @@ void creacionPDB(const char *PDB, unsigned char *visitados, int *info){
 				printf("❌ Error: No se pudo crear el archivo.\n");
 		}
 	}else{                              //Existe, la cargamos
+        printf("Cargando '%s'...\n", PDB);
         int indice, valor;
         FILE *base = fopen(PDB, "r");
-        fscanf(base, "%d %d %d", &info[0], &info[1], &info[2]);
+        fscanf(base, "%d %d %d %d %d %d %d %d", &info[0], &info[1], &info[2], &info[3], &info[4], &info[5], &info[6], &info[7]);
         while(fscanf(base, "%d %d", &indice, &valor) == 2){
             visitados[indice] = valor;
         }
         fclose(base);
-        //printf("✅ Se cargo exitosamente la PDB '%s'.\n", PDB);
+        printf("✅ Se cargo exitosamente la PDB '%s'.\n", PDB);
     }
 }
