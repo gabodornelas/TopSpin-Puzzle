@@ -19,13 +19,13 @@ int indicePerfecto(int a, int b, int c, int d, int e, int f, int g, int h, int *
     int pAjustada = 0;
     int p[8] = {0}; 
     int id = 0;
-    for (int i = 0; i < 8; i++)         // Encontramos las posiciones de las 8 piezas en los 12 puestos
+    for(int i = 0; i < 8; i++)         // Encontramos las posiciones de las 8 piezas en los 12 puestos
         for (int j = 0; j < 12; j++)
             if (state[j] == valores[i]) {
                 p[i] = j;
                 break;                  // Lo encontramos, pasamos a la siguiente pieza
             }
-    for (int i = 0; i < 8; i++) {       // Calculo de la pAjustada
+    for(int i = 0; i < 8; i++) {       // Calculo de la pAjustada
         pAjustada = p[i];
         for(int j = 0; j < i; j++)      // Restamos 1 por cada pieza anterior que ya ocupa un índice menor
             if(p[j] < p[i])
