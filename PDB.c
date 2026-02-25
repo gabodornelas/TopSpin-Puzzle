@@ -16,7 +16,7 @@ int indicePerfecto(int a, int b, int c, int d, int e, int f, int g, int h, int *
     int valores[8] = {a,b,c,d,e,f,g,h}; // Agrupamos las 8 piezas en un arreglo para poder iterarlas
     // Multiplicadores precalculados para 8 piezas en 12 espacios, calculados como permutaciones de los espacios restantes.
     int multiplicadores[8] = {1663200, 151200, 15120, 1680, 210, 30, 5, 1};
-    int p_ajustada = 0;
+    int pAjustada = 0;
     int p[8] = {0}; 
     int id = 0;
     for (int i = 0; i < 8; i++)         // Encontramos las posiciones de las 8 piezas en los 12 puestos
@@ -25,12 +25,12 @@ int indicePerfecto(int a, int b, int c, int d, int e, int f, int g, int h, int *
                 p[i] = j;
                 break;                  // Lo encontramos, pasamos a la siguiente pieza
             }
-    for (int i = 0; i < 8; i++) {       // Calculo de la p_ajustada
-        p_ajustada = p[i];
+    for (int i = 0; i < 8; i++) {       // Calculo de la pAjustada
+        pAjustada = p[i];
         for(int j = 0; j < i; j++)      // Restamos 1 por cada pieza anterior que ya ocupa un índice menor
             if(p[j] < p[i])
-                p_ajustada--;
-        id += p_ajustada*multiplicadores[i]; // Sumamos al ID usando el multiplicador correspondiente
+                pAjustada--;
+        id += pAjustada*multiplicadores[i]; // Sumamos al ID usando el multiplicador correspondiente
     }
     return id;
 }
